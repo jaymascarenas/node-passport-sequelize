@@ -1,0 +1,1 @@
+# node-passport-sequelize
