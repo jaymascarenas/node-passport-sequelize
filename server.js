@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const app = express();
 const passport = require('passport');
@@ -18,14 +19,9 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 //For Handlebars
-app.set('views', './app/views');
-app.engine('hbs', exphbs({extname: '.hbs'}));
+app.set('views', './app/views')
+app.engine('hbs', exphbs({ extname: '.hbs', defaultLayout: 'main' }));
 app.set('view engine', '.hbs');
-
-app.get('/', function(req, res) {
-  //res.send('Welcome to Passport with Sequelize');
-  res.render('index');
-});
 
 //Models
 const models = require('./app/models');
@@ -41,12 +37,12 @@ models.sequelize
   .sync()
   .then(function() {
     console.log('Nice! Database looks fine');
+
+    app.listen(3000, function(err) {
+      if (!err) console.log('Site is live');
+      else console.log(err);
+    });
   })
   .catch(function(err) {
     console.log(err, 'Something went wrong with the Database Update!');
   });
-
-app.listen(3000, function(err) {
-  if (!err) console.log('Site is live');
-  else console.log(err);
-});
