@@ -1,6 +1,6 @@
-##Node MySql Sequelize MVC with Passport, Express, and Handlebars
+Node MySql Sequelize MVC with Passport, Express, and Handlebars
 
-####This repo contains everything you need to get started on your next full-stack node application.
+This repo contains everything you need to get started on your next full-stack node application.
 
 Simply run:
 
