@@ -7,32 +7,46 @@ const bodyParser = require('body-parser');
 const env = require('dotenv').load();
 const exphbs = require('express-handlebars');
 
-//For BodyParser
+// BodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// For Passport
+// Passport
 app.use(
-  session({ secret: 'keyboard cat', resave: true, saveUninitialized: true })
+  session({ secret: 'rHUyjs6RmVOD06OdOTsVAyUUCxVXaWci', resave: true, saveUninitialized: true })
 ); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-//For Handlebars
-app.set('views', './app/views')
-app.engine('hbs', exphbs({ extname: '.hbs', defaultLayout: 'main' }));
+// Handlebars
+const viewsPath = path.join(__dirname, 'views');
+const layoutsPath = path.join(viewsPath, 'layouts');
+const partialsPath = path.join(viewsPath, 'partials');
+app.set('views', viewsPath);
+
+const exphbsConfig = exphbs.create({
+  defaultLayout: 'main',
+  layoutsDir: layoutsPath,
+  partialsDir: [partialsPath],
+  extname: '.hbs'
+});
+
+app.engine('hbs', exphbsConfig.engine);
 app.set('view engine', '.hbs');
 
-//Models
-const models = require('./app/models');
+// Models
+const models = require('./models');
 
-//Routes
-const authRoute = require('./app/routes/auth.js')(app, passport);
+// Express static assets
+app.use(express.static("public"));
 
-//load passport strategies
-require('./app/config/passport/passport.js')(passport, models.user);
+// Routes
+const authRoute = require('./routes/auth.js')(app, passport);
 
-//Sync Database
+// Load passport strategies
+require('./config/passport/passport.js')(passport, models.user);
+
+// Sync Database
 models.sequelize
   .sync()
   .then(function() {

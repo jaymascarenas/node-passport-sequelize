@@ -3,7 +3,6 @@ var authController = require('../controllers/authcontroller.js');
 module.exports = (app, passport) => {
 
   app.get('/', function(req, res) {
-    //res.send('Welcome to Passport with Sequelize');
     res.render('index');
   });
 
