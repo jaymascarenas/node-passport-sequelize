@@ -16,7 +16,7 @@ app.use(
   session({ secret: 'rHUyjs6RmVOD06OdOTsVAyUUCxVXaWci', resave: true, saveUninitialized: true })
 ); // session secret
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
+app.use(passport.session());
 
 // Handlebars
 const viewsPath = path.join(__dirname, 'views');
@@ -41,7 +41,7 @@ const models = require('./models');
 app.use(express.static("public"));
 
 // Routes
-const authRoute = require('./routes/auth.js')(app, passport);
+const authRoute = require('./controllers/auth.js')(app, passport);
 
 // Load passport strategies
 require('./config/passport/passport.js')(passport, models.user);
@@ -50,13 +50,13 @@ require('./config/passport/passport.js')(passport, models.user);
 models.sequelize
   .sync()
   .then(function() {
-    console.log('Nice! Database looks fine');
+    console.log('Database Connected');
 
     app.listen(3000, function(err) {
-      if (!err) console.log('Site is live');
+      if (!err) console.log('Connected at http://localhost:3000');
       else console.log(err);
     });
   })
   .catch(function(err) {
-    console.log(err, 'Something went wrong with the Database Update!');
+    console.log(err, 'Error on Database Sync. Please try again!');
   });
